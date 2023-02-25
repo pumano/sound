@@ -116,7 +116,7 @@ When calling `useSound`, you can pass it a variety of options:
 | interrupt    | boolean   |
 | soundEnabled | boolean   |
 | sprite       | SpriteMap |
-| [delegated]  | —         |
+| delegated    | Object    |
 
 - `volume` is a number from `0` to `1`, where `1` is full volume and `0` is comletely muted.
 - `playbackRate` is a number from `0.5` to `4`. It can be used to slow down or speed up the sample. Like a turntable, changes to speed also affect pitch.
@@ -124,7 +124,15 @@ When calling `useSound`, you can pass it a variety of options:
 - `soundEnabled` allows you to pass a value (typically from context or redux or something) to mute all sounds. Note that this can be overridden in the `PlayOptions`, see below
 - `sprite` allows you to use a single `useSound` composable for multiple sound effects. See [“Sprites”](https://github.com/vueuse/sound#sprites) below.
 
-`[delegated]` refers to the fact that any additional argument you pass in `ComposableOptions` will be forwarded to the `Howl` constructor. See "Escape hatches" below for more information.
+`delegated` refers to the fact that any additional argument you pass in `delegated` object will be forwarded to the `Howl` constructor. See "Escape hatches" below for more information.
+
+for example:
+
+```js
+const playbackRate = ref(0.75)
+
+const { play } = useSound('/path/to/sound', { playbackRate, delegated: { loop: true } })
+```
 
 ### The `play` function
 
@@ -223,13 +231,15 @@ To play a specific sprite, we'll pass its `id` when calling the `play` function:
 
 Howler is a very powerful library, and we've only exposed a tiny slice of what it can do in `useSound`. We expose two escape hatches to give you more control.
 
-First, any unrecognized option you pass to `ComposableOptions` will be delegated to `Howl`. You can see the [full list](https://github.com/goldfire/howler.js#options) of options in the Howler docs. Here's an example of how we can use `onend` to fire a function when our sound stops playing:
+First, any unrecognized option you can pass to `delegated` object an that will be delegated to `Howl`. You can see the [full list](https://github.com/goldfire/howler.js#options) of options in the Howler docs. Here's an example of how we can use `onend` to fire a function when our sound stops playing:
 
 ```js
 const { play } = useSound('/thing.mp3', {
-  onend: () => {
-    console.info('Sound ended!')
-  },
+  delegated: {
+    onend: () => {
+      console.info('Sound ended!')
+    },
+  }
 })
 ```
 

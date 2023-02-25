@@ -4,7 +4,7 @@ import type { ComposableOptions, HowlStatic, MaybeRef, PlayFunction, PlayOptions
 
 export function useSound(
   url: MaybeRef<string>,
-  { volume = 1, playbackRate = 1, soundEnabled = true, interrupt = false, autoplay = false, onload, ...delegated }: ComposableOptions = {},
+  { volume = 1, playbackRate = 1, soundEnabled = true, interrupt = false, autoplay = false, onload, delegated = {} }: ComposableOptions = {},
 ) {
   const HowlConstructor = ref<HowlStatic | null>(null)
   const isPlaying = ref<boolean>(false)
